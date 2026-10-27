@@ -1,126 +1,69 @@
-BMI Fit
+# BMI Fit - Backend & AI Integration Service
 
-BMI Fit is a Single Page Application (SPA) developed with Python. The system aims to support low-income individuals in calculating their Body Mass Index (BMI) and generating personalized training and diet plans to promote health and well-being.
-👨‍💻 Project Participants
+A RESTful API built with FastAPI that processes user physical assessment data and leverages OpenAI's LLM via dynamic prompt engineering to generate strictly formatted, personalized diet and training plans.
+## Technical Architecture & My Specific Contributions
 
-    Enzo Nascimento Cabrera - @EnzoCabrera
-    Geziel Oliveira Silva - @ImG1029
-    Tannus Koussa Neto - @tannuskoussa
-    William Menezes Damascena - @william-menezes
+> **Note on Authorship:** This repository is a fork from an academic group project. My specific role was focused on the core backend infrastructure, database configuration, and the automated testing suite, providing a stable foundation for the application's AI integrations.
 
-🚀 Technologies Used
+*   **API Design (FastAPI):** Structured the foundational backend routing and business logic (`services/`), ensuring clean separation of concerns and reliable endpoints.
+*   **Quality Assurance & Testing (Pytest):** Built and maintained the automated testing suite. Developed unit and integration tests to validate route stability, core BMI logic, and robust error handling during external service calls.
+*   **Database Infrastructure:** Configured the database sessions and ORM models (SQLAlchemy) for PostgreSQL, ensuring reliable data persistence for user profiles and biometric data.
+*   **Integration Support:** Provided backend support and manual testing for the OpenAI API integration pipeline, ensuring payload structures met system requirements.
 
-    Python 3.11
-    FastAPI 0.115.12
-    OpenAI API (GPT-3.5 Turbo)
-    PostgreSQL 15.8
-    Docker
+## Tech Stack
 
-🗂️ Project Structure
+*   **Language & Framework:** Python 3.11, FastAPI 0.115.12
+*   **Database:** PostgreSQL 15.8 (ORM: SQLAlchemy), Redis (Rate Limiting)
+*   **AI Integration:** OpenAI API (GPT-3.5 Turbo)
+*   **Testing:** Pytest
+*   **Infrastructure:** Docker, Docker Compose
 
-The project follows the FastAPI architecture pattern and includes the following main modules:
+## Running the Project Locally with Docker
 
-    api/ – Contains the application's routes, organized by feature (e.g., users, BMI, diets). Also includes API configurations and authentication.
-    db/ – Responsible for database definitions: ORM models (SQLAlchemy) and database session setup.
-    services/ – Holds the business logic, separating it from the route layer. Each file handles a specific feature (e.g., BMI, diets, training).
-    utils/ – Stores helper functions and reusable configurations, such as OpenAI prompts or common utilities.
+The entire application environment (Backend, PostgreSQL, and Redis) is containerized.
 
-✅ Features
-👤 Users
-
-    Sign up – Register new users.
-    Login – User authentication.
-
-📏 BMI
-
-    Physical assessment – Form to collect data and calculate BMI.
-    Dashboard – Displays the submitted information.
-
-🏋️‍♂️ Training Plans
-
-    Training creation – Available after completing a physical assessment.
-    Training update – Allows users to modify existing plans.
-
-🥗 Diet Plans
-
-    Diet creation – Takes dietary restrictions into account.
-    Diet update – Allows users to edit or replace existing meal plans.
-
-
-🚀 Running the Project Locally with Docker
-
-This project was developed using FastAPI, PostgreSQL, and Docker. To run it locally, follow the steps below:
-📦 Prerequisites
+Prerequisites
 
     Docker and Docker Compose installed
+    Ports 8000, 6379 and 5432 must be available on your machine
 
-    Ports 8000 and 5432 must be available on your machine
+### 1. Set environment variables
 
-🔧 Database Configuration
+Rename `.env.example` to `.env` file in root directory, `.env` example:
+```env
+DB_USER=postgres
+DB_PASSWORD=password
+DB_NAME=bmi-fit
 
-ℹ️ The project originally uses Supabase as the database, but that instance is not active in this public repository.
-You can either run a local PostgreSQL instance using Docker or connect to your own PostgreSQL database.
-🔧 Running PostgreSQL Locally with Docker
+REDIS_HOST=redis
+REDIS_PASSWORD=password
+REDIS_PORT=6379
 
-You can start a PostgreSQL container with the following command:
+SECRET_KEY=your_secret_key
+ALGORITHM=HS256
+ACCESS_TOKEN_EXPIRE_MINUTES=1000
 
-    -docker run --name postgres-bmi-fit -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=bmifit -p 5432:5432 -d postgres:15
+OPENAI_API_KEY=your_openai_key
+```
 
-Set your environment variable in the backend with the following DATABASE_URL (example only):
+### 2. Build and Execute
 
-    postgresql://postgres:postgres@localhost:5432/bmifit
+Run the following command to spin up the FastAPI server, PostgreSQL database, and Redis rate limiting simultaneously:
 
-🗄️ Redis Database
+```bash
+docker compose up --build -d
+```
 
-Start a Redis instance locally with:
+### 3. Run Migrations
 
-    docker run --name redis-bmi-fit -p 6379:6379 -d redis:alpine
-
-▶️ Running the Backend
-
-Clone the repository
-
-    git clone https://github.com/EnzoCabrera/bmi-calculator-backend.git
-    cd bmi-calculator-backend
-
-Set environment variables
-
-Create a .env file inside the backend/ directory with the following content:
-
-    user=your_db_user
-    password=your_db_password
-    host=your_db_host
-    port=your_db_port
-    dbname=your_db_name
-    
-    DATABASE_URL=postgresql://postgres:postgres@localhost:5432/bmifit  # Example only
-    
-    REDIS_HOST=your_redis_host
-    REDIS_PASSWORD=your_redis_password
-    REDIS_PORT=your_redis_port
-    
-    SECRET_KEY=your_secret_key
-    ALGORITHM="HS256"
-    ACCESS_TOKEN_EXPIRE_MINUTES=1000
-    
-    OPENAI_API_KEY=your_openai_key
-
-Start the backend using Docker Compose
-
-    docker compose up --build
-
-The backend will be available at:
-
-    http://localhost:8000
-
-The interactive API documentation is available at:
-
-    http://localhost:8000/docs
-
-🧬 Running Migrations with Alembic
-
-If you're using a fresh database, run the migrations with Alembic (either inside the container or in your Python environment):
-
-    alembic upgrade head
+With the containers running, execute Alembic to build the database schema:
 
 
+```bash
+docker exec -it <backend_container_name> alembic upgrade head
+```
+
+### 4. Access the API
+
+ - Swagger UI: `http://localhost:8000/docs`
+ - ReDoc: `http://localhost:8000/redoc`
