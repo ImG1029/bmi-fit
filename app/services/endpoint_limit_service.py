@@ -5,18 +5,17 @@ from app.api.auth import get_current_user
 from app.db.session import get_db
 from app.db.models import Training, User, UserBMI, Diet
 from redis import Redis
-import redis
 import os
 from dotenv import load_dotenv
 
 load_dotenv()
 
 # environment variables for Redis
-redis_client = redis.Redis(
+redis_client = Redis(
   host=os.getenv("REDIS_HOST"),
-  port=os.getenv("REDIS_PORT"),
+  port=int(os.getenv("REDIS_PORT")),
   password=os.getenv("REDIS_PASSWORD"),
-  ssl=True
+    ssl=False
 )
 
 

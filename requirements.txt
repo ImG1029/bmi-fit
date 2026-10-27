@@ -2,7 +2,9 @@ fastapi[all]
 uvicorn
 sqlalchemy
 alembic
+psycopg
 psycopg2-binary
+pytest
 python-dotenv
 python-jose[cryptography]
 passlib

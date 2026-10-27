@@ -1,5 +1,5 @@
 from unittest.mock import patch
-from tests.conftest import DummyTexts
+from app.tests.conftest import DummyTexts
 from app.db.models import UserBMI, Training
 
 prefix = "/api/trainings"

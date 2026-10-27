@@ -1,5 +1,5 @@
 from unittest.mock import patch
-from tests.conftest import DummyTexts
+from app.tests.conftest import DummyTexts
 from app.services.diets_service import calculate_diet, sanitize_diet_text, parse_diet_description
 from app.db.models import UserBMI, Diet
 

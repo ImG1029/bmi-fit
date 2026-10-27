@@ -1,0 +1,10 @@
+.git/
+.gitignore
+
+__pychache__/
+.venv/
+
+.env
+.env.example
+
+.idea/

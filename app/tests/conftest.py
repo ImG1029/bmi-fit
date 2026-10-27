@@ -1,3 +1,8 @@
+import os
+import sys
+
+os.environ["DATABASE_URL"] = "sqlite:///:memory:"
+
 import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine, StaticPool
@@ -6,7 +11,7 @@ from app.db.models import Base, Diet, UserBMI, User, Training
 from app.main import app
 from app.db.session import get_db
 from app.api.auth import get_current_user, hash_password
-from datetime import datetime
+from datetime import datetime, timezone
 from app.services.endpoint_limit_service import post_rate_limiter, get_rate_limiter, auth_rate_limiter
 
 SQLALCHEMY_TEST_DATABASE_URL = "sqlite:///:memory:"
@@ -46,7 +51,7 @@ def populate_test_database(db_session):
         bmi_value=22.5,
         height=1.75,
         weight=69.0,
-        created_at=datetime.utcnow(),
+        created_at=datetime.now(timezone.utc),
     )
     db_session.add(user_bmi)
 
@@ -54,7 +59,7 @@ def populate_test_database(db_session):
         description=DummyTexts.test_diet,
         bmi_status_id=2,
         user_id=1,
-        created_at=datetime.utcnow(),
+        created_at=datetime.now(timezone.utc),
     )
     db_session.add(diet)
 
@@ -62,7 +67,7 @@ def populate_test_database(db_session):
         description=DummyTexts.test_training,
         bmi_status_id=2,
         user_id=1,
-        created_at=datetime.utcnow(),
+        created_at=datetime.now(timezone.utc),
     )
     db_session.add(training)
     db_session.commit()

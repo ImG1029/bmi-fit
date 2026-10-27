@@ -2,7 +2,7 @@
 FROM python:3.11
 
 # Set the working directory
-WORKDIR /app
+WORKDIR /backend
 
 # Copy the requirements file
 COPY requirements.txt .

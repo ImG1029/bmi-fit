@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import List, Dict, Any
 
 from fastapi import APIRouter
@@ -77,7 +77,7 @@ def calculate_diet(db: Session, user_bmi, bmi_status_id: int, user_id: int, diet
     diet.user_id = user_id
     diet.bmi_status_id = bmi_status_id
     diet.intolerances =", ".join(intolerances)
-    diet.created_at = datetime.utcnow()
+    diet.created_at = datetime.now(timezone.utc)
 
     db.add(diet)
     db.commit()

@@ -6,6 +6,8 @@ from dotenv import load_dotenv
 # Load environment variables
 load_dotenv()
 
+# DATABASE_URL = "postgresql://postgres:password@postgres-bmi:5432/bmi-fit"
+
 DATABASE_URL = os.getenv("DATABASE_URL")
 
 # Create the database engine
